@@ -1,0 +1,43 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.5.0'
+    id 'maven'
+    id "com.github.breadmoirai.github-release" version "2.2.12"
+}
+
+version "0.0.1"
+group 'ru.kinjalik'
+
+def localProperties = new Properties()
+localProperties.load(new FileInputStream("local.properties"))
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://maven.pkg.github.com/kinjalik/almost-secure-storage-core"
+        credentials {
+            username = System.getenv("GITHUB_ACTOR") ?: localProperties["USERNAME"]
+            password = System.getenv("GITHUB_TOKEN") ?: localProperties["TOKEN"]
+        }
+    }
+}
+
+dependencies {
+    implementation "ru.kinjalik:almost-secure-storage-core:0.2.0"
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+githubRelease {
+    token System.getenv("GITHUB_TOKEN") ?: localProperties["TOKEN"]
+    owner System.getenv("GITHUB_ACTOR") ?: localProperties["USERNAME"]
+    repo "AlmostSecureStorageCLI"
+    overwrite true
+}
