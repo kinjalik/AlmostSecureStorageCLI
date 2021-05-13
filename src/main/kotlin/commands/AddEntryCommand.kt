@@ -1,0 +1,4 @@
+package commands
+
+class AddEntryCommand {
+}

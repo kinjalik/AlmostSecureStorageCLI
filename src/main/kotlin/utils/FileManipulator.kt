@@ -36,9 +36,12 @@ class FileManipulator(val filename: String) {
         if (filePostfix.reversed() != postfix)
             throw InvalidFileException("File postfix is incorrect.")
 
-        println(fileBytes.size)
         val rawData = fileBytes.slice(prefix.size until fileBytes.size - postfix.size)
-        return StorageData.read(password, rawData.toByteArray())
+        try {
+            return StorageData.read(password, rawData.toByteArray())
+        } catch (e: Exception) {
+            throw InvalidFileException("Failed to read stored data. Probably, the password is incorrect.")
+        }
     }
 
     fun fileExists() = File(filename).exists()
