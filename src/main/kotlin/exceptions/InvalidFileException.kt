@@ -1,4 +1,3 @@
 package exceptions
 
-class InvalidFileException {
-}
+class InvalidFileException(private val msg: String): Exception(msg)

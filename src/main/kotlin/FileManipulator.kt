@@ -1,8 +1,7 @@
 import cryptography.Algorithms
+import exceptions.InvalidFileException
 import operationalComponents.StorageData
-import java.io.File
-import java.io.FileOutputStream
-import java.io.FileWriter
+import java.io.*
 
 class FileManipulator(val filename: String) {
     // Magic Bytes Sequence
@@ -20,6 +19,26 @@ class FileManipulator(val filename: String) {
         fw.write(rawData.toByteArray())
         fw.flush()
         fw.close()
+    }
+
+    fun readFile(password: ByteArray): StorageData {
+        if (!fileExists())
+            throw FileNotFoundException("File $filename not found")
+
+        val fr = FileInputStream(File(filename))
+        val fileBytes = fr.readAllBytes()
+            ?: throw InvalidFileException("Zero bytes was read. Possibly, the file is corrupted.")
+
+        val filePrefix = fileBytes.slice(prefix.indices)
+        if (filePrefix != prefix)
+            throw InvalidFileException("File prefix is incorrect.")
+        val filePostfix = fileBytes.slice(fileBytes.size-1 downTo fileBytes.size - postfix.size)
+        if (filePostfix.reversed() != postfix)
+            throw InvalidFileException("File postfix is incorrect.")
+
+        println(fileBytes.size)
+        val rawData = fileBytes.slice(prefix.size until fileBytes.size - postfix.size)
+        return StorageData.read(password, rawData.toByteArray())
     }
 
     fun fileExists() = File(filename).exists()
