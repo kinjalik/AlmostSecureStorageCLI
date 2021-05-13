@@ -1,0 +1,18 @@
+name: "Release"
+
+on:
+  push:
+    branches:
+      - "master"
+
+jobs:
+  release:
+    name: "Build artifacts and release"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Build"
+        run:
+          gradle build
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
