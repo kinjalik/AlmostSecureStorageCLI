@@ -20,6 +20,7 @@ repositories {
                 username = localProperties["USERNAME"]
                 password = localProperties["TOKEN"]
             }
+            println "user=$username,pass=$password"
         }
     }
 }
