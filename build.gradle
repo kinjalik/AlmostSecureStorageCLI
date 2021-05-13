@@ -52,8 +52,8 @@ githubRelease {
     owner "kinjalik" // default is the last part of your group. Eg group: "com.github.breadmoirai" => owner: "breadmoirai"
     repo "AlmostSecureStorageCLI" // by default this is set to your project name
     prerelease false // by default this is false
-    releaseAssets jar.destinationDir.name
-    println jar.destinationDir.name
+    FilenameFilter filter = {dir, filename -> filename.contains(project.version)}
+    releaseAssets = jar.destinationDir.listFiles filter
 
     overwrite true // by default false; if set to true, will delete an existing release with the same tag and name
 //    dryRun true // by default false; you can use this to see what actions would be taken without making a release
