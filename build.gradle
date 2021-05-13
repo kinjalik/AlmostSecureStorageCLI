@@ -6,8 +6,6 @@ plugins {
 version '0.0.1'
 group 'ru.kinjalik'
 
-def localProperties = new Properties()
-localProperties.load(new FileInputStream("local.properties"))
 
 repositories {
     mavenCentral()
@@ -16,6 +14,12 @@ repositories {
         credentials {
             username = System.getenv("GITHUB_ACTOR") ?: localProperties["USERNAME"]
             password = System.getenv("GITHUB_TOKEN") ?: localProperties["TOKEN"]
+            if (username == null) {
+                def localProperties = new Properties()
+                localProperties.load(new FileInputStream("local.properties"))
+                username = localProperties["USERNAME"]
+                password = localProperties["TOKEN"]
+            }
         }
     }
 }
