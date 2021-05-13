@@ -12,8 +12,8 @@ repositories {
     maven {
         url "https://maven.pkg.github.com/kinjalik/almost-secure-storage-core"
         credentials {
-            username = System.getenv("GITHUB_ACTOR") ?: localProperties["USERNAME"]
-            password = System.getenv("GITHUB_TOKEN") ?: localProperties["TOKEN"]
+            username = System.getenv("GITHUB_ACTOR")
+            password = System.getenv("GITHUB_TOKEN")
             if (username == null) {
                 def localProperties = new Properties()
                 localProperties.load(new FileInputStream("local.properties"))
