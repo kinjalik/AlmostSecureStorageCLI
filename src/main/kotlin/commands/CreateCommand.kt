@@ -1,9 +1,8 @@
 package commands
 
-import FileManipulator
+import utils.FileManipulator
 import cryptography.Algorithms
 import kotlinx.cli.*
-import java.util.*
 
 @OptIn(ExperimentalCli::class)
 class CreateCommand(filenameDelegate: ArgumentValueDelegate<String>) : Subcommand("create", "Create new database") {

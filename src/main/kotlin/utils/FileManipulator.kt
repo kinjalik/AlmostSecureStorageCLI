@@ -1,3 +1,5 @@
+package utils
+
 import cryptography.Algorithms
 import exceptions.InvalidFileException
 import operationalComponents.StorageData
@@ -10,6 +12,9 @@ class FileManipulator(val filename: String) {
 
     fun createFile(password: ByteArray, author: String, encAlgorithms: Algorithms) {
         val storage = StorageData(author, encAlgorithms)
+        writeFile(storage, password)
+    }
+    fun writeFile(storage: StorageData, password: ByteArray) {
         val storageSerialized = storage.getResult(password)
         val rawData = prefix.toMutableList()
         rawData.addAll(storageSerialized.toList())
