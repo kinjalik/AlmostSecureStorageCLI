@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.5.0'
+    id 'com.github.breadmoirai.github-release' version "2.2.12"
 }
 
 version '0.0.1'
@@ -36,4 +37,25 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+githubRelease {
+    def tokenTmp = System.getenv("GITHUB_TOKEN")// This is your personal access token with Repo permissions
+    if (tokenTmp == null) {
+        def localProperties = new Properties()
+        localProperties.load(new FileInputStream("local.properties"))
+        token localProperties["TOKEN"]
+    } else {
+        token tokenTmp
+    }
+    // You get this from your user settings > developer settings > Personal Access Tokens
+    owner "kinjalik" // default is the last part of your group. Eg group: "com.github.breadmoirai" => owner: "breadmoirai"
+    repo "AlmostSecureStorageCLI" // by default this is set to your project name
+    prerelease false // by default this is false
+    releaseAssets jar.destinationDir.name
+    println jar.destinationDir.name
+
+    overwrite true // by default false; if set to true, will delete an existing release with the same tag and name
+//    dryRun true // by default false; you can use this to see what actions would be taken without making a release
+    apiEndpoint "https://api.github.com" // should only change for github enterprise users
 }
