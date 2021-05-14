@@ -5,7 +5,7 @@ plugins {
     id 'application'
 }
 
-version '0.1.0'
+version '0.0.1'
 group 'ru.kinjalik'
 
 
@@ -28,13 +28,11 @@ repositories {
 
 dependencies {
     compileOnly "org.jetbrains.kotlinx:kotlinx-cli:0.3.2"
-    compileOnly "org.jetbrains.kotlin:kotlin-stdlib"
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1"
-    implementation "ru.kinjalik:almost-secure-storage-core:0.2.10"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    implementation "ru.kinjalik:almost-secure-storage-core:0.2.1"
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
-
 }
 
 test {
