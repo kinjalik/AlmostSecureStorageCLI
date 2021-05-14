@@ -74,3 +74,9 @@ jar {
         configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it)}
     }
 }
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions {
+        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+    }
+}
