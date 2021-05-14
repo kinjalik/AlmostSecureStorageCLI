@@ -10,21 +10,19 @@ import operationalComponents.StorageData
 import utils.Dialog
 import utils.FileManipulator
 
-@OptIn(ExperimentalCli::class)
-class GetEntryCommand(filenameDelegate: ArgumentValueDelegate<String>) :
-    Subcommand("get-entry", "Fetch entry from database") {
-    private val filename: String by filenameDelegate
-    val entryName by argument(ArgType.String, "entryName", "Name of the data entity")
+class GetEntryCommand(
+    name: String,
+    desc: String,
+    filenameDelegate: ArgumentValueDelegate<String>
+) : Command(name, desc, filenameDelegate) {
+    private val entryName by argument(ArgType.String, "entryName", "Name of the data entity")
+
     override fun execute() {
-        val manipulator = FileManipulator(filename)
-        if (!manipulator.fileExists()) {
-            println("Unable to add new entry: File doesn't exists.")
-            return
-        }
+        super.execute()
         val password = Dialog.ask("password phrase")
 
         try {
-            val storage = manipulator.readFile(password.toByteArray())
+            val storage = manipulator!!.readFile(password.toByteArray())
             val e = storage.getEntity(password.toByteArray(), entryName)
             println("Entity ${e.name}")
             for (prop in e.properties) {
