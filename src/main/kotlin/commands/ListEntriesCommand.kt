@@ -1,29 +1,30 @@
 package commands
 
-import utils.FileManipulator
 import exceptions.InvalidFileException
-import kotlinx.cli.*
+import kotlinx.cli.ArgumentValueDelegate
+import kotlinx.cli.ExperimentalCli
+import kotlinx.cli.Subcommand
+import utils.FileManipulator
 
 @OptIn(ExperimentalCli::class)
-class ReadInfoCommand(filenameDelegate: ArgumentValueDelegate<String>) : Subcommand("db-info", "Get information about database") {
+class ListEntriesCommand(filenameDelegate: ArgumentValueDelegate<String>) : Subcommand("ls", "Get list of entries in database") {
     private val filename: String by filenameDelegate
     override fun execute() {
         val manipulator = FileManipulator(filename)
         if (!manipulator.fileExists()) {
-            println("File $filename not found.")
+            println("Unable to add new entry: File doesn't exists.")
             return
         }
 
         var password: String? = null
         while (password == null) {
-            print("Type password phrase: ")
+            println("Type password phrase:")
             password = readLine()
         }
 
         try {
             val storage = manipulator.readFile(password.toByteArray())
-            println("Author: ${storage.author}")
-            println("Number of entities: ${storage.entities.size}")
+            storage.entities.forEach { println("Entity: ${it.name}") }
         } catch (e: InvalidFileException) {
             println(e.message)
         }
