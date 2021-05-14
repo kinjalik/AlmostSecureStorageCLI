@@ -4,15 +4,14 @@ import utils.FileManipulator
 import exceptions.InvalidFileException
 import kotlinx.cli.*
 
-@OptIn(ExperimentalCli::class)
-class ReadInfoCommand(filenameDelegate: ArgumentValueDelegate<String>) : Subcommand("db-info", "Get information about database") {
-    private val filename: String by filenameDelegate
+class ReadInfoCommand(
+    name: String,
+    desc: String,
+    filenameDelegate: ArgumentValueDelegate<String>
+) : Command(name, desc, filenameDelegate) {
+
     override fun execute() {
-        val manipulator = FileManipulator(filename)
-        if (!manipulator.fileExists()) {
-            println("File $filename not found.")
-            return
-        }
+        super.execute()
 
         var password: String? = null
         while (password == null) {
@@ -21,7 +20,7 @@ class ReadInfoCommand(filenameDelegate: ArgumentValueDelegate<String>) : Subcomm
         }
 
         try {
-            val storage = manipulator.readFile(password.toByteArray())
+            val storage = manipulator!!.readFile(password.toByteArray())
             println("Author: ${storage.author}")
             println("Number of entities: ${storage.entities.size}")
         } catch (e: InvalidFileException) {
