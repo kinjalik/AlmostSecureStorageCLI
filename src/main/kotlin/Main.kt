@@ -1,6 +1,4 @@
-import commands.AddEntryCommand
-import commands.CreateCommand
-import commands.ReadInfoCommand
+import commands.*
 import kotlinx.cli.*
 
 @OptIn(ExperimentalCli::class)
@@ -11,9 +9,10 @@ fun main(args: Array<String>) {
     parser.subcommands(
         CreateCommand(filenameDelegate.delegate),
         ReadInfoCommand(filenameDelegate.delegate),
+        GetEntryCommand(filenameDelegate.delegate),
+        ListEntriesCommand(filenameDelegate.delegate),
         AddEntryCommand(filenameDelegate.delegate)
     )
 
     parser.parse(args)
-    println("DONE")
 }
