@@ -9,9 +9,11 @@ import commands.SetPropertyCommand
 import kotlinx.cli.ArgParser
 import kotlinx.cli.ArgType
 import kotlinx.cli.ExperimentalCli
+import utils.Version
 
 @OptIn(ExperimentalCli::class)
 fun main(args: Array<String>) {
+    println(Version().ver())
     val parser = ArgParser("AlmostSecureStorage")
 
     val filenameDelegate = parser.argument(ArgType.String, "filename", description = "Database file")
