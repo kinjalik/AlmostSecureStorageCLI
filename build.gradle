@@ -73,6 +73,7 @@ jar {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it)}
         configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it)}
     }
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
