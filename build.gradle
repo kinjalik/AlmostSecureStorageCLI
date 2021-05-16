@@ -1,13 +1,13 @@
 plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.5.0'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.5.0'
     id 'com.github.breadmoirai.github-release' version "2.2.12"
     id 'application'
 }
 
-version '0.2.0'
+version '0.3.0'
 group 'ru.kinjalik'
-
 
 repositories {
     mavenCentral()
@@ -31,6 +31,10 @@ dependencies {
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1"
     implementation "ru.kinjalik:almost-secure-storage-core:0.2.14"
+
+    implementation "io.ktor:ktor-client-core:1.5.2"
+    implementation "io.ktor:ktor-client-cio:1.5.2"
+
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
@@ -68,6 +72,8 @@ application {
 jar {
     manifest {
         attributes 'Main-Class': 'MainKt'
+        attributes 'Implementation-Version': project.version
+        attributes 'Git-Repository': "kinjalik/AlmostSecureStorageCLI"
     }
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it)}

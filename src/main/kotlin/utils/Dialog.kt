@@ -9,4 +9,10 @@ object Dialog {
         }
         return res
     }
+
+    fun warnLatestVersion(latest: Metadata.GitHubRelease) {
+        val res = "Almost Secure Storage CLI ${latest.tag_name} available!\n" +
+            "Download: ${latest.url}\n"
+        println(res)
+    }
 }

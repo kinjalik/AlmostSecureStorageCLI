@@ -9,13 +9,24 @@ import commands.SetPropertyCommand
 import kotlinx.cli.ArgParser
 import kotlinx.cli.ArgType
 import kotlinx.cli.ExperimentalCli
-import utils.Version
+import utils.Dialog
+import utils.Metadata
 
 @OptIn(ExperimentalCli::class)
-fun main(args: Array<String>) {
-    println(Version().ver())
-    val parser = ArgParser("AlmostSecureStorage")
+suspend fun main(args: Array<String>) {
+    val meta = Metadata()
+    try {
+        /*
+        We don't care about concurrence, because message about new version should be displayed BEFORE further exec
+         */
+        val latest = meta.fetchLatestVersion()
+        if (latest != null && latest.tag_name != "v" + meta.version)
+            Dialog.warnLatestVersion(latest)
+    } catch (e: Throwable) {
+        println(e)
+    }
 
+    val parser = ArgParser("AlmostSecureStorage")
     val filenameDelegate = parser.argument(ArgType.String, "filename", description = "Database file")
     parser.subcommands(
         CreateCommand("create", "Create new database", filenameDelegate.delegate),
