@@ -2,7 +2,6 @@ package commands
 
 import exceptions.InvalidFileException
 import kotlinx.cli.ArgumentValueDelegate
-import kotlinx.cli.ExperimentalCli
 import utils.Dialog
 
 class DeleteEntryCommand(
@@ -11,10 +10,10 @@ class DeleteEntryCommand(
     filenameDelegate: ArgumentValueDelegate<String>
 ) : Command(name, desc, filenameDelegate) {
     override fun execute() {
-        val password = Dialog.ask("password phrase")
+        val password = Dialog.ask(msgs.getString("dialog.askPassword"))
 
         try {
-            val entryName = Dialog.ask("name of entry to delete")
+            val entryName = Dialog.ask(msgs.getString("dialog.askEntityName"))
             val key = password.toByteArray()
             val storage = manipulator!!.readFile(key)
             storage.deleteEntity(entryName)

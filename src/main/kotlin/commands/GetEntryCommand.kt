@@ -4,11 +4,7 @@ import exceptions.EntityNotFoundException
 import exceptions.InvalidFileException
 import kotlinx.cli.ArgType
 import kotlinx.cli.ArgumentValueDelegate
-import kotlinx.cli.ExperimentalCli
-import kotlinx.cli.Subcommand
-import operationalComponents.StorageData
 import utils.Dialog
-import utils.FileManipulator
 
 class GetEntryCommand(
     name: String,
@@ -19,19 +15,19 @@ class GetEntryCommand(
 
     override fun execute() {
         super.execute()
-        val password = Dialog.ask("password phrase")
+        val password = Dialog.ask(msgs.getString("dialog.askPassword"))
 
         try {
             val storage = manipulator!!.readFile(password.toByteArray())
             val e = storage.getEntity(password.toByteArray(), entryName)
-            println("Entity ${e.name}")
+            println("${msgs.getString("dialog.Entity")} ${e.name}")
             for (prop in e.properties) {
                 println("${prop.key}: ${prop.value}")
             }
         } catch (e: InvalidFileException) {
             println(e.message)
         } catch (e: EntityNotFoundException) {
-            println("No such data entity found.")
+            println(msgs.getString("error.entityNotFound") + ".")
         }
     }
 }
