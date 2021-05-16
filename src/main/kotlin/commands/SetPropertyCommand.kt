@@ -17,7 +17,7 @@ class SetPropertyCommand(
 
     override fun execute() {
         super.execute()
-        val password = Dialog.ask("password phrase")
+        val password = Dialog.ask(msgs.getString("dialog.askPassword"))
 
         try {
             val storage = manipulator!!.readFile(password.toByteArray())
@@ -30,7 +30,7 @@ class SetPropertyCommand(
         } catch (e: InvalidFileException) {
             println(e.message)
         } catch (e: EntityNotFoundException) {
-            println("No such data entity found.")
+            println(msgs.getString("error.entityNotFound") + ".")
         }
     }
 }

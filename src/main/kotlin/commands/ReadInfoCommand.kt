@@ -3,6 +3,7 @@ package commands
 import utils.FileManipulator
 import exceptions.InvalidFileException
 import kotlinx.cli.*
+import utils.Dialog
 
 class ReadInfoCommand(
     name: String,
@@ -13,16 +14,12 @@ class ReadInfoCommand(
     override fun execute() {
         super.execute()
 
-        var password: String? = null
-        while (password == null) {
-            print("Type password phrase: ")
-            password = readLine()
-        }
+        val password = Dialog.ask(msgs.getString("dialog.askPassword"))
 
         try {
             val storage = manipulator!!.readFile(password.toByteArray())
-            println("Author: ${storage.author}")
-            println("Number of entities: ${storage.entities.size}")
+            println("${msgs.getString("dialog.Author")}: ${storage.author}")
+            println("${msgs.getString("dialog.numOfEntities")}: ${storage.entities.size}")
         } catch (e: InvalidFileException) {
             println(e.message)
         }

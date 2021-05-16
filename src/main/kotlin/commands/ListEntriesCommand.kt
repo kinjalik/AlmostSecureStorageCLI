@@ -15,11 +15,11 @@ class ListEntriesCommand(
 
     override fun execute() {
         super.execute()
-        val password = Dialog.ask("password phrase")
+        val password = Dialog.ask(msgs.getString("dialog.askPassword"))
 
         try {
             val storage = manipulator!!.readFile(password.toByteArray())
-            storage.entities.forEach { println("Entity: ${it.name}") }
+            storage.entities.forEach { println("${msgs.getString("dialog.Entity")}: ${it.name}") }
         } catch (e: InvalidFileException) {
             println(e.message)
         }
