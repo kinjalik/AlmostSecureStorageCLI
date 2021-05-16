@@ -4,32 +4,36 @@ import utils.FileManipulator
 import cryptography.Algorithms
 import kotlinx.cli.*
 import utils.Dialog
+import java.util.ResourceBundle
 
 class CreateCommand(
     name: String,
     desc: String,
     filenameDelegate: ArgumentValueDelegate<String>
 ) : Command(name, desc, filenameDelegate) {
+
     override fun execute() {
         manipulator = FileManipulator(filename)
 
-        println("Creating DB in file $filename")
+        println("${msgs.getString("create.announce")} $filename")
         if (manipulator!!.fileExists()) {
-            print("File already exists. Rewrite? [y/n] ")
+            val accept = msgs.getString("app.accept")
+            val decline = msgs.getString("app.decline")
+            print("${msgs.getString("create.existsMessage")} [$accept/$decline] ")
             var answer: String? = ""
-            while (answer != "n" && answer != "y" && answer != null) {
+            while (answer != accept && answer != decline && answer != null) {
                 answer = readLine()
             }
-            if (answer == "n" || answer == null) {
-                println("Aborted by user, exiting.")
+            if (answer == decline || answer == null) {
+                println(msgs.getString("create.abortedByUser"))
                 return
             }
         }
 
-        val author = Dialog.ask("author's name")
-        val password = Dialog.ask("password phrase")
+        val author = Dialog.ask(msgs.getString("dialog.askAuthor"))
+        val password = Dialog.ask(msgs.getString("dialog.askPassword"))
 
         manipulator!!.createFile(password.toByteArray(), author, Algorithms.AES128CBC)
-        println("File successfully created! Do not forget to memorize the password phrase!")
+        println(msgs.getString("create.success"))
     }
 }

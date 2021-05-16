@@ -4,11 +4,13 @@ import cryptography.Algorithms
 import exceptions.InvalidFileException
 import operationalComponents.StorageData
 import java.io.*
+import java.util.ResourceBundle
 
 class FileManipulator(val filename: String) {
     // Magic Bytes Sequence
     val prefix = listOf<Byte>(0x70, 0x6c, 0x65, 0x61, 0x73, 0x65, 0x5f, 0x63, 0x6c, 0x6f, 0x73, 0x65, 0x5f, 0x69, 0x74)
     val postfix = prefix
+    val msgs = ResourceBundle.getBundle("messages")
 
     fun createFile(password: ByteArray, author: String, encAlgorithms: Algorithms) {
         val storage = StorageData(author, encAlgorithms)
@@ -28,24 +30,24 @@ class FileManipulator(val filename: String) {
 
     fun readFile(password: ByteArray): StorageData {
         if (!fileExists())
-            throw FileNotFoundException("File $filename not found")
+            throw FileNotFoundException(msgs.getString("error.fileNotFound"))
 
         val fr = FileInputStream(File(filename))
         val fileBytes = fr.readAllBytes()
-            ?: throw InvalidFileException("Zero bytes was read. Possibly, the file is corrupted.")
+            ?: throw InvalidFileException(msgs.getString("error.zeroBytes"))
 
         val filePrefix = fileBytes.slice(prefix.indices)
         if (filePrefix != prefix)
-            throw InvalidFileException("File prefix is incorrect.")
+            throw InvalidFileException(msgs.getString("error.incorrectPrefix"))
         val filePostfix = fileBytes.slice(fileBytes.size-1 downTo fileBytes.size - postfix.size)
         if (filePostfix.reversed() != postfix)
-            throw InvalidFileException("File postfix is incorrect.")
+            throw InvalidFileException(msgs.getString("error.incorrectPostfix"))
 
         val rawData = fileBytes.slice(prefix.size until fileBytes.size - postfix.size)
         try {
             return StorageData.read(password, rawData.toByteArray())
         } catch (e: Exception) {
-            throw InvalidFileException("Failed to read stored data. Probably, the password is incorrect.")
+            throw InvalidFileException(msgs.getString("error.failedToRead"))
         }
     }
 
